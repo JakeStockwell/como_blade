@@ -66,7 +66,11 @@ class MotionController extends Controller
      */
     public function edit(Motion $motion)
     {
-        //
+        $this->authorize('update', $motion);
+ 
+        return view('motions.edit', [
+            'motion' => $motion,
+        ]);
     }
 
     /**
@@ -78,7 +82,15 @@ class MotionController extends Controller
      */
     public function update(Request $request, Motion $motion)
     {
-        //
+        $this->authorize('update', $motion);
+ 
+        $validated = $request->validate([
+            'motion' => 'required|string|max:255',
+        ]);
+ 
+        $motion->update($validated);
+ 
+        return redirect(route('motions.index'));
     }
 
     /**
@@ -89,6 +101,10 @@ class MotionController extends Controller
      */
     public function destroy(Motion $motion)
     {
-        //
+        $this->authorize('delete', $motion);
+ 
+        $motion->delete();
+ 
+        return redirect(route('motions.index'));
     }
 }
