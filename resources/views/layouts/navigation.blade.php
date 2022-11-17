@@ -16,8 +16,11 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('motions.index')" :active="request()->routeIs('motions.index')">
-        {{ __('Motions') }}
-    </x-nav-link>
+                        {{ __('Motions') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('groups.index')" :active="request()->routeIs('groups.index')">
+                        {{ __('Groups') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -75,6 +78,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('motions.index')" :active="request()->routeIs('motions.index')">
                 {{ __('Motions') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('groups.index')" :active="request()->routeIs('groups.index')">
+                {{ __('Groups') }}
             </x-responsive-nav-link>
         </div>
 
