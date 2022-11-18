@@ -35,7 +35,7 @@ Route::resource('motions', MotionController::class)
     ->middleware(['auth', 'verified']);
 
 Route::resource('groups', GroupController::class)
-    ->only(['index', 'store', 'edit', 'update', 'destroy'])
+    ->only(['index', 'store', 'edit', 'update', 'destroy', 'show'])
     ->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

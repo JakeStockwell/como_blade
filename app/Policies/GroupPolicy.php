@@ -65,7 +65,7 @@ class GroupPolicy
      */
     public function delete(User $user, Group $group)
     {
-        //
+        return $this->update($user, $group);
     }
 
     /**

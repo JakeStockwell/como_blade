@@ -54,7 +54,9 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        //
+        return view('groups.view', [
+            'groups' => Group::with('user')->latest()->get(),
+        ]);
     }
 
     /**
@@ -100,6 +102,10 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        //
+        $this->authorize('delete', $group);
+
+        $group->delete();
+
+        return redirect(route('groups.index'));
     }
 }

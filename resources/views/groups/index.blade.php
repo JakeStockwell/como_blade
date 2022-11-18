@@ -39,6 +39,16 @@
                                         <x-dropdown-link :href="route('groups.edit', $group)">
                                             {{ __('Edit') }}
                                         </x-dropdown-link>
+                                        <form method="POST" action="{{ route('groups.destroy', $group) }}">
+                                            @csrf
+                                            @method('delete')
+                                            <x-dropdown-link :href="route('groups.destroy', $group)" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                {{ __('Delete') }}
+                                            </x-dropdown-link>
+                                        </form>
+                                        <x-dropdown-link :href="route('groups.show', $group)">
+                                            {{ __('View Group') }}
+                                        </x-dropdown-link>
                                     </x-slot>
                                 </x-dropdown>
                             @endif
