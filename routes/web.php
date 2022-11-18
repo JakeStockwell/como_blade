@@ -38,4 +38,8 @@ Route::resource('groups', GroupController::class)
     ->only(['index', 'store', 'edit', 'update', 'destroy', 'show'])
     ->middleware(['auth', 'verified']);
 
+Route::resource('members', MemberController::class)
+    ->only(['index', 'store', 'edit', 'update', 'destroy', 'show'])
+    ->middleware(['auth', 'verified']);
+
 require __DIR__.'/auth.php';
