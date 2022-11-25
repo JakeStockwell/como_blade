@@ -23,12 +23,18 @@
         <x-como-dropdown-list>
             <x-slot name="trigger">
                 <button class="w-full mb-2 py-2 pl-1 pr-3 px-0 mx-2 bg-red-300 text-sm font-semibold text-left rounded-xl" style="display:inline">
-                    Make New Group From X-Component
+                    View My Groups
                     <x-icon name="down-arrow" />
                 </button>
             </x-slot>
 
-            <x-como-dropdown-item href="/">Link Text</x-como-dropdown-item>
+            @foreach ($groups as $group)
+                <x-como-dropdown-item>
+                    <x-como-dropdown-link :href="route('groups.show', $group)">
+                        {{ $group->group_name }}
+                    </x-como-dropdown-link>
+                </x-como-dropdown-item>
+            @endforeach
         </x-como-dropdown-list>
 
         <div class="mt-4">
