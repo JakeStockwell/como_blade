@@ -11,7 +11,13 @@ class Group extends Model
 
     protected $fillable = [
         'group_name',
+        'slug',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function user()
     {

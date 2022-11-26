@@ -8,6 +8,18 @@ use Illuminate\Http\Request;
 class GroupController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('como_slug')->only('store');
+        //$this->middleware('log')->only('index');
+        //$this->middleware('subscribed')->except('store');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -40,7 +52,8 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'group_name' => 'required|string|max:255',
+            'group_name' => 'required|string|unique:groups|max:255',
+            'slug' => 'required|string|unique:groups|max:255',
         ]);
 
         $request->user()->groups()->create($validated);
