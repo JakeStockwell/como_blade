@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller
 {
@@ -30,6 +31,7 @@ class GroupController extends Controller
         return view('groups.index', [
             'groups' => Group::with('user')->latest()->get(),
             'c_user' => $request->user(),
+            'exists' => $request->found,
         ]);
     }
 
@@ -51,10 +53,23 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'group_name' => 'required|string|unique:groups|max:255',
-            'slug' => 'required|string|unique:groups|max:255',
+        // $validated = $request->validate([
+        //     //'group_name' => 'required|string|unique:groups|max:255',
+        //     'slug' => 'required|string|unique:groups|max:255',
+        // ]);
+
+        $validator = Validator::make($request->all(), [
+            'group_name' => 'required|string|max:255',
+            'slug' => 'required|unique:groups|max:255',
         ]);
+
+        if ($validator->fails()) {
+            return redirect(route('groups.index'))
+                        ->withErrors('You\'ve already used that Group name. Please choose another!')
+                        ->withInput();
+        }
+
+        $validated = $validator->validated();
 
         $request->user()->groups()->create($validated);
 

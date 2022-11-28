@@ -8,7 +8,7 @@
                 </svg>
             </button>
 
-            <form x-show="show" style="display:none" method="POST" action="{{ route('groups.store') }}">
+            <form x-show="show" id="make_group" style="display:none" method="POST" action="{{ route('groups.store') }}">
                 @csrf
                 <textarea
                     name="group_name"
@@ -20,6 +20,19 @@
             </form>
         </div>
 
+        @if ($errors->any())
+            <div class="w-full mb-2 py-2 pl-1 pr-3 px-0 mx-2 bg-red-600 text-white text-sm font-semibold text-left rounded-xl">
+                <script>$(document).ready(function(){
+                    $('#make_group').show(500)
+                    });</script>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <x-como-dropdown-list-green>
             <x-slot name="trigger">
                 <button class="w-full mb-2 py-2 pl-1 pr-3 px-0 mx-2 bg-green-400 text-sm font-semibold text-left rounded-xl" style="display:inline">
@@ -30,11 +43,13 @@
 
             @foreach ($groups as $group)
                 @if ($c_user->id === $group->user->id)
-                <x-como-dropdown-item>
-                    <x-como-dropdown-link :href="route('groups.show', $group)">
-                        {{ $group->group_name }}
-                    </x-como-dropdown-link>
-                </x-como-dropdown-item>
+
+                        <x-como-dropdown-item>
+                            <x-como-dropdown-link :href="route('groups.show', $group)">
+                                {{ $group->group_name }}
+                            </x-como-dropdown-link>
+                        </x-como-dropdown-item>
+
                 @endif
             @endforeach
         </x-como-dropdown-list-green>

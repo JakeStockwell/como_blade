@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CreateSlug
 {
@@ -19,7 +20,7 @@ class CreateSlug
         $user = $request->user();
         $slug = $request['group_name'] . '_' . $request->user()->id;
         $request['slug'] = $slug;
-        
+
         return $next($request);
     }
 }
