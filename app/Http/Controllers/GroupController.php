@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
@@ -28,10 +31,14 @@ class GroupController extends Controller
      */
     public function index(Request $request)
     {
+        $c_user = $request->user();
+        $group_members = User::find($c_user->id)->members;
+        $my_groups = User::find($c_user->id)->groups;
+        dd($group_members);
         return view('groups.index', [
-            'groups' => Group::with('user')->latest()->get(),
-            'c_user' => $request->user(),
-            'exists' => $request->found,
+            'groups' => $my_groups,
+            'c_user' => $c_user,
+            'group_members' => $group_members,
         ]);
     }
 
@@ -53,11 +60,6 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        // $validated = $request->validate([
-        //     //'group_name' => 'required|string|unique:groups|max:255',
-        //     'slug' => 'required|string|unique:groups|max:255',
-        // ]);
-
         $validator = Validator::make($request->all(), [
             'group_name' => 'required|string|max:255',
             'slug' => 'required|unique:groups|max:255',
@@ -80,12 +82,21 @@ class GroupController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Group  $group
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function show(Group $group)
+    public function show(Request $request, Group $group)
     {
+        $c_user = $request->user();
+        $my_groups = User::find($c_user->id)->groups;
+        $group_members = Group::find($group->id)->members;
+//dd($my_groups);
         return view('groups.view', [
-            'groups' => Group::with('user')->latest()->get(),
+            'group' => $group,
+            'my_groups' => $my_groups,
+            'c_user' => $c_user,
+            //'members' => Member::with('group')->latest()->get(),
+            'members' => $group_members,
         ]);
     }
 

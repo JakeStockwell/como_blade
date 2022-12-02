@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Group;
 use App\Models\User;
+use App\Models\Member;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::factory(10)->create();
         Group::factory(10)->create();
+        Member::factory(10)->create();
 
     }
 

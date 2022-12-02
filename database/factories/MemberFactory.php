@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Group;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Group>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Member>
  */
-class GroupFactory extends Factory
+class MemberFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,8 +20,7 @@ class GroupFactory extends Factory
     {
         return [
             'user_id' => $this->faker->numberBetween(1, User::all()->count()),
-            'group_name' => $this->faker->word,
-            'slug' => $this->faker->slug,
+            'group_id' => $this->faker->numberBetween(1, Group::all()->count()),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -47,8 +47,15 @@ class User extends Authenticatable
         return $this->hasMany(Motion::class);
     }
 
+    /** Return groups that a user has created. */
     public function groups()
     {
         return $this->hasMany(Group::class);
+    }
+
+    /** Return groups that a user belongs to. */
+    public function members()
+    {
+        return $this->hasMany(Member::class);
     }
 }
