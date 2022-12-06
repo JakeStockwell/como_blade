@@ -32,11 +32,27 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         $c_user = $request->user();
+        $groups_i_made = User::find($c_user->id)->groups;
+
+        // $group_members = DB::table('members')
+        //             ->leftJoin('groups', 'members.group_id', '=', 'groups.id')
+        //             ->leftJoin('users', 'members.user_id', '=', 'users.id')
+        //             ->select('groups.group_name', 'users.name', 'users.email')
+        //             ->where('users.id', $c_user->id)
+        //             ->get();
+
         $group_members = User::find($c_user->id)->members;
-        $my_groups = User::find($c_user->id)->groups;
-        dd($group_members);
+ 
+        foreach($group_members as $group){
+            $my_groups = Group::find($group->group_id);
+            $group->group_name = $my_groups->group_name;
+            //$group->put('group_name', $my_groups->group_name);
+        }
+        
+        //dd($group_members);
+        //dd($my_groups);
         return view('groups.index', [
-            'groups' => $my_groups,
+            'groups' => $groups_i_made,
             'c_user' => $c_user,
             'group_members' => $group_members,
         ]);

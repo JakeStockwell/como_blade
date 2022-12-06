@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -55,14 +56,23 @@ class MemberController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Member  $member
      * @param  \App\Models\Group  $group
+     * @param  \App\Models\Member  $member
      * @return \Illuminate\Http\Response
      */
-    public function show(Member $member, Group $group)
+    public function show(Request $request, Member $member)
     {
-        dd($group);
+        $group = Group::find($member->group_id);
+        $members = Group::find($member->group_id)->members;
+        dd($members);
+        foreach($members as $m){
+            $my_member = Member::find($my_member->id);
+            $members->group_name = $my_groups->group_name;
+        }
+        
         return view('members.view', [
+            'member' => $member,
+            'members' => $members,
             'group' => $group,
             'c_user' => $request->user(),
         ]);

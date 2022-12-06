@@ -9,11 +9,19 @@ class Member extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'group_id',
+        'user_id',
+    ];
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }
-
-// SELECT g.group_name, u.name
-// FROM members m 
-// 	JOIN `groups` g ON g.id = m.group_id
-//     JOIN `users` u ON u.id = m.user_id
-// WHERE m.user_id = 11
