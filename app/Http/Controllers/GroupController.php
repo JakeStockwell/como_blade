@@ -32,8 +32,8 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         $c_user = $request->user();
-        $groups_i_made = User::find($c_user->id)->groups;
 
+        /** Get the Group names that this user belongs to : Query Builder*/
         // $group_members = DB::table('members')
         //             ->leftJoin('groups', 'members.group_id', '=', 'groups.id')
         //             ->leftJoin('users', 'members.user_id', '=', 'users.id')
@@ -41,20 +41,19 @@ class GroupController extends Controller
         //             ->where('users.id', $c_user->id)
         //             ->get();
 
-        $group_members = User::find($c_user->id)->members;
- 
-        foreach($group_members as $group){
-            $my_groups = Group::find($group->group_id);
-            $group->group_name = $my_groups->group_name;
-            //$group->put('group_name', $my_groups->group_name);
-        }
-        
-        //dd($group_members);
-        //dd($my_groups);
+        /** Get the Groups that this user belongs to : Eloquent */
+        $my_groups = Member::with(['user', 'group'])->whereUserId($c_user->id)->get();
+
+        /** Get the Groups that this user created : Eloquent */
+        $groups_i_made = User::find($c_user->id)->groups;
+
+        /** Get the Groups that this user doesn't belong to : Eloquent */
+        $not_my_groups = Group::whereDoesntHave('members', function($query) {$query->whereIn('user_id', ['6']);})->get();
+
         return view('groups.index', [
-            'groups' => $groups_i_made,
-            'c_user' => $c_user,
-            'group_members' => $group_members,
+            'groups' => $my_groups,
+            'groups_i_made' => $groups_i_made,
+            'not_my_groups' => $not_my_groups,
         ]);
     }
 
@@ -98,20 +97,30 @@ class GroupController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Group  $group
+     * @param  \App\Models\Group  $not_my_groups
      * 
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, Group $group)
     {
         $c_user = $request->user();
-        $my_groups = User::find($c_user->id)->groups;
-        $group_members = Group::find($group->id)->members;
+        $groups_i_made = User::find($c_user->id)->groups;
+        $my_groups = Member::with(['user', 'group'])->whereUserId($c_user->id)->get();
+        $group_members = Member::with(['group', 'user'])->whereGroupId($group->id)->get();
+
+        /** Check if the current user is a member of the current group */
+        $member = Member::where('group_id', '=', $group->id, 'and')->where('user_id', '=', $c_user->id)->first();
+
+        /** Get the Groups that this user doesn't belong to : Eloquent */
+        $not_my_groups = Group::whereDoesntHave('members', function($query) {$query->whereIn('user_id', ['6']);})->get();
 //dd($my_groups);
         return view('groups.view', [
             'group' => $group,
+            'groups_i_made' => $groups_i_made,
             'my_groups' => $my_groups,
+            'not_my_groups' => $not_my_groups,
             'c_user' => $c_user,
-            //'members' => Member::with('group')->latest()->get(),
+            'member' => $member,
             'members' => $group_members,
         ]);
     }

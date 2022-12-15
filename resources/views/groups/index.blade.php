@@ -42,15 +42,13 @@
                 </button>
             </x-slot>
 
-            @if ($groups->count() > 0)
-                @foreach ($groups as $group)
-                    @if ($c_user->id === $group->user->id)
-                        <x-como-dropdown-item>
-                            <x-como-dropdown-link :href="route('groups.show', $group)">
-                                {{ $group->group_name }}
-                            </x-como-dropdown-link>
-                        </x-como-dropdown-item>
-                    @endif
+            @if ($groups_i_made->count() > 0)
+                @foreach ($groups_i_made as $group)
+                    <x-como-dropdown-item>
+                        <x-como-dropdown-link :href="route('groups.show', $group)">
+                            {{ $group->group_name }}
+                        </x-como-dropdown-link>
+                    </x-como-dropdown-item>
                 @endforeach
             @else
                 <x-como-dropdown-item>
@@ -67,17 +65,17 @@
                 </button>
             </x-slot>
 
-            @if ($group_members->count() > 0)
-                @foreach ($group_members as $group_member)
+            @if ($groups->count() > 0)
+                @foreach ($groups as $group)
                     <x-como-dropdown-item>
-                        <x-como-dropdown-link :href="route('members.show', $group_member)">
-                            {{ $group_member->group_name }}
+                        <x-como-dropdown-link :href="route('groups.show', $group->group->slug)">
+                            {{ $group->group->group_name }}
                         </x-como-dropdown-link>
                     </x-como-dropdown-item>
                 @endforeach
             @else
                         <x-como-dropdown-item>
-                            <x-como-dropdown-link :href="route('groups.show', $group)">
+                            <x-como-dropdown-link :href="route('groups.show')">
                                 You're not in any Groups!
                             </x-como-dropdown-link>
                         </x-como-dropdown-item>
@@ -92,14 +90,12 @@
                 </button>
             </x-slot>
 
-            @foreach ($groups as $group)
-                @if ($c_user->id !== $group->user->id)
+            @foreach ($not_my_groups as $group)
                 <x-como-dropdown-item>
                     <x-como-dropdown-link :href="route('groups.show', $group)">
                         {{ $group->group_name }}
                     </x-como-dropdown-link>
                 </x-como-dropdown-item>
-                @endif
             @endforeach
         </x-como-dropdown-list-red>
     </div>

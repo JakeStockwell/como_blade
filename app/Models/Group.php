@@ -28,6 +28,5 @@ class Group extends Model
     {
         return $this->hasMany(Member::class);
     }
-
     
 }
