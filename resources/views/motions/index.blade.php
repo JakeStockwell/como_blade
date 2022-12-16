@@ -1,15 +1,16 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-        <form method="POST" action="{{ route('motions.store') }}">
-            @csrf
-            <textarea
-                name="motion"
-                placeholder="{{ __('What I want to know is...') }}"
-                class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-            >{{ old('motion') }}</textarea>
-            <x-input-error :messages="$errors->get('message')" class="mt-2" />
-            <x-primary-button class="mt-4">{{ __('Motion') }}</x-primary-button>
-        </form>
+        <x-como-card>
+            <section>
+                <form method="POST" action="{{ route('motions.store') }}">
+                    @csrf
+                    <x-como-card-textarea name="motion" placeholder="{{ __('What I want to know is...') }}">
+                    </x-como-card-textarea>
+                    <x-input-error :messages="$errors->get('message')" class="mt-2" />
+                    <x-primary-button class="mt-4">{{ __('Motion') }}</x-primary-button>
+                </form>
+            </section>
+        </x-como-card>
 
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
             @foreach ($motions as $motion)
