@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Motion;
+use App\Models\Group;
+use App\Models\Member;
 use Illuminate\Http\Request;
 
 class MotionController extends Controller
@@ -10,12 +12,17 @@ class MotionController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $c_user = $request->user();
+        /** Get the Groups that this user belongs to : Eloquent */
+        $my_groups = Member::with(['user', 'group'])->whereUserId($c_user->id)->get();
+//dd($not_my_groups);
         return view('motions.index', [
-
+            'my_groups' => $my_groups,
             'motions' => Motion::with('user')->latest()->get(),
         ]);
     }

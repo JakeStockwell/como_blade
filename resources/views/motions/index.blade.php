@@ -1,17 +1,47 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-        <x-como-card>
+        <form method="POST" action="{{ route('motions.store') }}">
+            <x-como-card>
+                <section>
+                    
+                        @csrf
+                        <x-como-card-textarea name="motion" placeholder="{{ __('What I want to know is...') }}">
+                        </x-como-card-textarea>
+                        <x-input-error :messages="$errors->get('message')" class="mt-2" />
+                        <x-primary-button class="mt-4">{{ __('Motion') }}</x-primary-button>
+                </section>
+            </x-como-card>
             <section>
-                <form method="POST" action="{{ route('motions.store') }}">
-                    @csrf
-                    <x-como-card-textarea name="motion" placeholder="{{ __('What I want to know is...') }}">
-                    </x-como-card-textarea>
-                    <x-input-error :messages="$errors->get('message')" class="mt-2" />
-                    <x-primary-button class="mt-4">{{ __('Motion') }}</x-primary-button>
-                </form>
-            </section>
-        </x-como-card>
+                <x-como-dropdown-list-red>
+                    <x-slot name="trigger">
+                        <button class="w-full mb-2 py-2 pl-1 pr-3 px-0 mx-2 text-sm font-semibold text-left rounded-xl bg-red-400" style="display:inline">
+                            Add Groups
+                            <x-icon name="down-arrow" />
+                        </button>
+                    </x-slot>
 
+                    @foreach ($my_groups as $my_group)
+                        <x-como-dropdown-item>
+                            <x-como-dropdown-link :href="route('groups.show', $my_group)">
+                                {{ $my_group->group_name }}
+                            </x-como-dropdown-link>
+                        </x-como-dropdown-item>
+                    @endforeach
+                </x-como-dropdown-list-red>
+            </section>
+            <section>
+                <x-como.accordion>
+                    <x-como.accordion-item class="rounded-t">
+                        <x-slot:id>0</x-slot:id>
+                        This is made with Alpine JS and Tailwind CSS and is in a component in a view.
+                    </x-como.accordion-item>
+                    <x-como.accordion-item class="rounded-b">
+                    <x-slot:id>1</x-slot:id>
+                        This is also made with Alpine JS and Tailwind CSS and is in a component in a view.
+                    </x-como.accordion-item>
+                </x-como-accordion>
+            </section>
+        </form>
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
             @foreach ($motions as $motion)
                 <div class="p-6 flex space-x-2">
